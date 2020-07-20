@@ -1,0 +1,42 @@
+##This file deploys the lifo application configured to the postgres 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lifoapp
+  labels:
+    app: lifoapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lifoapp
+  template:
+    metadata:
+      labels:
+        app: lifoapp
+    spec:
+      containers:
+        - name: lifoapp
+          image: hvh208/v2:latest
+          env:
+            - name: spring.profiles.active
+              value: pgsql
+          ports:
+            - containerPort: 8080
+      initContainers:
+        - name: init-myservice
+          image: busybox
+          command: ['sh', '-c', "while true; do if nc -z pgsql 5432; then exit; fi; done"]
+             
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lifoapp
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    targetPort: 8080
+  selector:
+    app: lifoapp
