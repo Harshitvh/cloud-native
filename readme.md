@@ -18,3 +18,8 @@ Step 2. Run using Dockerfile
 docker build .
 docker run -e 'spring.profiles.active=mssql' build_id  ##For MS-SQL as the persistent store
 docker run -e 'spring.profiles.active=pgsql' build_id  ##For MS-SQL as the persistent store
+
+
+sudo docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Sql@123456789' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest
+
+ sudo docker run --name cloudpgres -e POSTGRES_PASSWORD=Sql@123456789 -p 5432:5432 -d postgres
